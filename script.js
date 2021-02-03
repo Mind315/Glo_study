@@ -1,44 +1,76 @@
 "use strict";
-//--------------------------------------------Переменные
-let money = +prompt("Ваш месячный доход?", 31000),
+// ------------Проверяем! Если число - результат будет true!
+let isNumber = function (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
+//-------------- Переменные!
+let money,
   income = "рэкет",
   addExpenses = prompt(
     "Перечислите возможные расходы за рассчитываемый период через запятую",
     "ЖКХ, Такси, учеба"
   ),
   deposit = confirm("Есть ли у вас депозит в банке?"),
-  expenses1 = prompt(
-    "Введите обязательную статью расходов?",
-    "Оплата интернета"
-  ),
-  amount1 = +prompt("Во сколько это обойдется?", 1000),
-  expenses2 = prompt(
-    "Введите обязательную статью расходов?",
-    "Поход в Рок-Бар!"
-  ),
-  amount2 = +prompt("Во сколько это обойдется?", 3000),
-  budgetDay = (money - (amount1 + amount2)) / 30,
   mission = 500000,
-  period = 10,
-  missionTarget = mission / (money - (amount1 + amount2));
-// --------------------------------------------------------------Функции
+  period = 10;
+let expenses = []; // <----- это массим с обязательными расходами.
+
+  //------------------- Проверка!! Ваш месячный доход!
+let start = function () {
+  
+  do {
+    money = +prompt("Ваш месячный доход?", 31000);
+  } while (!isNumber(money));
+};
+start();
+
+
+//------------------ Получаем все расходы и их названия.
 const getExpensesMonth = function () {
-  return amount1 + amount2;
+  let sum = 0;
+  for (let i = 0; i < 2; i++) {
+    expenses[i] = prompt(
+      "Введите обязательную статью расходов?",
+      "Оплата интернета"
+    );
+
+    let data;
+    do {
+      data = +prompt("Во сколько это обойдется?", 2000);
+    } while (!isNumber(data));
+    sum += data;
+  }
+  console.log(expenses);
+  return sum;
 };
+//-------------------- Записали в переменную!
+let expensesAmount = getExpensesMonth();
+
+
+//-------------------------- Вычисляем сколько накопили за месяц.
 const getAccumulatedMonth = function () {
-  return money - (amount1 + amount2);
+  return money - expensesAmount;
 };
 
-let accumulatedMonth = getAccumulatedMonth();
+let accumulatedMonth = getAccumulatedMonth();// Переменная с накоплениями
+let budgetDay = accumulatedMonth / 30;// Бюджет на день
+let missionTarget = mission / accumulatedMonth;// ????????разобраться. Это что-то осталось от прошлого кода.
 
+//--------------------------------Вычисления времени накопления цели в месяцах.
 const getTargetMonth = function () {
-  return mission / accumulatedMonth;
+  let targetMonth = Math.ceil(mission / accumulatedMonth);
+  if (targetMonth >= 0) {
+    return "Достигните цели накопления за " + targetMonth + " месяцев!!";
+  } else if (targetMonth < 0) {
+    return "Вы ничерта не накопите друг мой!";
+  }
 };
 
+// -------------------------------Проверка на тип данных.
 const showTypeOf = function (data) {
   console.log(data, typeof data);
 };
-
+//---------------------------------- Оценка, сколько денег ты зарабатываешь в день или ты бомж.
 let getStatusIncome = function () {
   if (budgetDay > 1200) {
     return "У вас высокий уровень дохода";
@@ -55,12 +87,10 @@ showTypeOf(money);
 showTypeOf(income);
 showTypeOf(deposit);
 
-console.log(getExpensesMonth());
+console.log(`Расходы на месяц ${expensesAmount}`);
 console.log(addExpenses.toLowerCase().split(", "));
 console.log("Бюджет на месяц " + accumulatedMonth);
-console.log(
-  "цель будет достигнута за: " + Math.ceil(getTargetMonth()) + " месяцев"
-);
+console.log(getTargetMonth());
 console.log("Бюджет на день : " + Math.floor(budgetDay));
 
 console.log(getStatusIncome());
