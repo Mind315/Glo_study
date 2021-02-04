@@ -32,7 +32,7 @@ const guessNumber = function () {
           return;
         }
       }
-    } else {
+    } else if(typeof num === "string") {
       alert('Это не число. Заново!');
       askNumber();
     }
