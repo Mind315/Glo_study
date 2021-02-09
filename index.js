@@ -9,13 +9,13 @@ let calc = document.getElementById('#start'),
     incomeElem1 = document.querySelectorAll('.additional_income-item')[0],
     incomeElem2 = document.querySelectorAll('.additional_income-item')[1],
 //-------------------------------Поля ввода в правой части-----------------------
-    budgetMonthValue = document.getElementsByClassName('budget_month-value'),
-    budgetDayValue = document.getElementsByClassName('budget_day-value'),
-    expensesMonthValue = document.getElementsByClassName('expenses_month-value'),
-    additionalIncomeValue = document.getElementsByClassName('additional_income-value'),
-    additionalExpensesValue = document.getElementsByClassName('additional_expenses-value'),
-    incomePeriodValue = document.getElementsByClassName('income_period-value'),
-    targetMonthValue = document.getElementsByClassName('target_month-value');
+    budgetMonthValue = document.getElementsByClassName('budget_month-value')[0],
+    budgetDayValue = document.getElementsByClassName('budget_day-value')[0],
+    expensesMonthValue = document.getElementsByClassName('expenses_month-value')[0],
+    additionalIncomeValue = document.getElementsByClassName('additional_income-value')[0],
+    additionalExpensesValue = document.getElementsByClassName('additional_expenses-value')[0],
+    incomePeriodValue = document.getElementsByClassName('income_period-value')[0],
+    targetMonthValue = document.getElementsByClassName('target_month-value')[0];
 // ------------------------------Месячный доход------------------------------
 let monthIncome = document.querySelector('.salary-amount'),
 // -------------------------------Доп доход----------------------------
