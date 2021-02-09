@@ -128,7 +128,7 @@ let appData = {
   appData.asking();
   appData.getExpensesMonth();
   appData.getBudget();
-
+  appData.getInfoDeposit();
 // --------------------------------------------------Вывод в консоль!
 console.log(appData.getTargetMonth());
 console.log(appData.getStatusIncome());
