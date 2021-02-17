@@ -109,13 +109,13 @@ AppData.prototype.res = function() {  // ----------------- тут я пытаю�
         if(incomeItems.length > 1) {
           console.log('incomeItems.length: ', incomeItems.length);
           for(let i = 1; i < incomeItems.length; i++) {
-            incomeItems[i].style.display = 'none';
+            incomeItems[i].remove();
           }     
         }
         // -------------------Проверка блоков "обязательный расходы" и удаление если болльше 1"
         if(expensesItems.length > 1) {
           for(let i = 1; i < expensesItems.length; i++) {
-            expensesItems[i].style.display = 'none';
+            expensesItems[i].remove();
           }      
         }
         // ---------- проверка кнопки ПЛЮС и добавление - если не ее нет.
