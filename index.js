@@ -106,6 +106,23 @@ let appData = {
             this.expensesMonth = 0;
 
           start.disabled = true;
+         // -------------------Проверка блоков "Дополнительный доход" и удаление если болльше 1"
+        if(incomeItems.length > 1) {
+          console.log('incomeItems.length: ', incomeItems.length);
+          incomeItems[2].style.display = 'none';
+          incomeItems[1].style.display = 'none';
+        }
+        // -------------------Проверка блоков "обязательный расходы" и удаление если болльше 1"
+        if(expensesItems.length > 1) {
+          console.log('incomeItems.length: ', expensesItems.length);
+          expensesItems[2].style.display = 'none';
+          expensesItems[1].style.display = 'none';
+        }
+        // ---------- проверка кнопки ПЛЮС и добавление - если не ее нет.
+        if(btnPlus[0].style.display == 'none' || btnPlus[1].style.display == 'none') {
+          btnPlus[0].style.display = 'block';
+          btnPlus[1].style.display = 'block';
+        }
 
     },
     // ------------ блокировка
