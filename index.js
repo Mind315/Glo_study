@@ -46,25 +46,25 @@ let isNumber = function (n) {
 
 
 // ------------------------------- Наш объект!
-let appData = {
-    income: {},
-    incomeMonth: 0,
-    addIncome: [], 
-    expenses: {},
-    addExpenses: [],
-    deposit: false,
-    percentDeposit: 0,
-    moneyDeposit: 0,
-    budget: 0,
-    budgetDay: 0,
-    budgetMonth: 0,
-    expensesMonth: 0,
+
+const AppData = function () {
+    this.income = {};
+    this.incomeMonth = 0;
+    this.addIncome = []; 
+    this.expenses = {};
+    this.addExpenses = [];
+    this.deposit = false;
+    this.percentDeposit = 0;
+    this.moneyDeposit = 0;
+    this.budget = 0;
+    this.budgetDay = 0;
+    this.budgetMonth = 0;
+    this.expensesMonth = 0;
+};
+
     // ----------- запрос за месячный доход.
-    start: function () {
-      // if (salaryAmount.value === '') {
-      //   alert('Ошибка, поле "Месячный доход" должно быть заполнено!');
-      //   return;
-      // }
+AppData.prototype.start = function () {
+     
       this.budget = +salaryAmount.value;
      
       this.getExpenses();
@@ -76,15 +76,14 @@ let appData = {
       //-------вызов showResult - должен быть последним!!!
       this.showResult();
       this.blockInputs();
-    },
-    res: function() {  // ----------------- тут я пытаюсь сделать сброс!! черт его дери
+    };
+
+AppData.prototype.res = function() {  // ----------------- тут я пытаюсь сделать сброс!! черт его дери
       let inputs = document.querySelectorAll('[type="text"]');
         for(let i = 0; i < inputs.length; i++) {//-------перебираю все инпуты
           inputs[i].disabled = false;
           inputs[i].value = '';      
-
         }
-
         start.style.display = 'inline';// ---- старт показал
         cancel.style.display = 'none';// ---- сброс скрыл
 
@@ -104,12 +103,29 @@ let appData = {
             this.budgetDay = 0;
             this.budgetMonth = 0;
             this.expensesMonth = 0;
-
+            
           start.disabled = true;
-
-    },
+          // -------------------Проверка блоков "Дополнительный доход" и удаление если болльше 1"
+        if(incomeItems.length > 1) {
+          console.log('incomeItems.length: ', incomeItems.length);
+          for(let i = 1; i < incomeItems.length; i++) {
+            incomeItems[i].style.display = 'none';
+          }     
+        }
+        // -------------------Проверка блоков "обязательный расходы" и удаление если болльше 1"
+        if(expensesItems.length > 1) {
+          for(let i = 1; i < expensesItems.length; i++) {
+            expensesItems[i].style.display = 'none';
+          }      
+        }
+        // ---------- проверка кнопки ПЛЮС и добавление - если не ее нет.
+        if(btnPlus[0].style.display == 'none' || btnPlus[1].style.display == 'none') {
+          btnPlus[0].style.display = 'block';
+          btnPlus[1].style.display = 'block';
+        }      
+    };
     // ------------ блокировка
-    blockInputs: function() {
+AppData.prototype.blockInputs = function() {
       let inputs = document.querySelectorAll('[type="text"]');
       for(let i = 0; i < inputs.length; i++) {//-------перебираю все инпуты
         inputs[i].disabled = true;
@@ -117,9 +133,9 @@ let appData = {
         start.style.display = 'none';
         cancel.style.display = 'inline';
       }
-    },
+    };
 
-    showResult: function() {
+AppData.prototype.showResult = function() {
       budgetMonthValue.value = this.budgetMonth;
       budgetDayValue.value = this.budgetDay;
       expensesMonthValue.value = this.expensesMonth;
@@ -132,9 +148,10 @@ let appData = {
       range.addEventListener('input', function() {
         incomePeriodValue.value = appData.calcPeriod();
       });
-    },
+    };
+
     // ------------ Добавление новых полей через кнопку expensesPlus
-    addExpensesBlock: function() {
+AppData.prototype.addExpensesBlock = function() {
       
       let cloneExpensesItem = expensesItems[0].cloneNode(true);
       expensesItems[0].parentNode.insertBefore(cloneExpensesItem, expensesPlus);
@@ -142,9 +159,9 @@ let appData = {
       if (expensesItems.length === 3) {
         expensesPlus.style.display = 'none';
       }
-    },
+    };
     // ---------------Добавление полей через кнопку incomePlus--------
-    addIncomeBlock: function() {
+AppData.prototype.addIncomeBlock = function() {
 
       let cloneIncomeItem = incomeItems[0].cloneNode(true);
       incomeItems[0].parentNode.insertBefore(cloneIncomeItem, incomePlus);
@@ -152,8 +169,8 @@ let appData = {
       if(incomeItems.length === 3) {
         incomePlus.style.display = 'none';
       }
-    },
-    getExpenses: function() {
+    };
+AppData.prototype.getExpenses = function() {
       expensesItems.forEach(function(item) {
         let itemExpenses = item.querySelector('.expenses-title').value;
         let cashExpenses = item.querySelector('.expenses-amount').value;
@@ -161,8 +178,8 @@ let appData = {
           appData.expenses[itemExpenses] = cashExpenses;
         }
       });
-    },
-    getIncome: function() {
+    };
+AppData.prototype.getIncome = function() {
       incomeItems.forEach(function(item) {
         let itemIncome = item.querySelector('.income-title').value;
         let cashIncome = item.querySelector('.income-amount').value;
@@ -174,9 +191,9 @@ let appData = {
          for (let key in appData.income) {
           appData.incomeMonth += +appData.income[key];
          }
-      },
+      };
     
-    getAddExpenses: function() {
+AppData.prototype.getAddExpenses = function() {
       let addExpenses = additionalExpensesItem.value.split(',');
       addExpenses.forEach(function(item) {
         item = item.trim();
@@ -184,39 +201,40 @@ let appData = {
           appData.addExpenses.push(item);
         }
       });
-    },
-    getAddIncome: function() {
+    };
+AppData.prototype.getAddIncome = function() {
       additionalIncomeItem.forEach(function(item) {
         let itemValue = item.value.trim();
         if(itemValue !== '') {
           appData.addIncome.push(itemValue);
         }
       });
-    },
+    };
   
     // --------------------------Суммируем обязательные расходы за Month.
-    getExpensesMonth: function () {
+AppData.prototype.getExpensesMonth = function () {
       
       for (let key in appData.expenses) {
         appData.expensesMonth += +appData.expenses[key];
       }
-    },
+    };
     // -------------------------------- тут наши накопления
-    getBudget: function () {
+AppData.prototype.getBudget = function () {
       appData.budgetMonth = appData.budget + appData.incomeMonth - appData.expensesMonth;// --- за месяц
       appData.budgetDay = Math.floor(appData.budgetMonth / 30);// --- за день
     },
     // ---------------------- за сколько месяцев накопим до mission.
-    getTargetMonth: function () {
+AppData.prototype.getTargetMonth = function () {
       let targetMonth = Math.ceil(targetAmount.value / appData.budgetMonth);
       if (targetMonth >= 0) {
         return "Достигните цели накопления за " + targetMonth + " месяцев!!";
       } else if (targetMonth < 0) {
         return "Вы ничерта не накопите друг мой!";
       }
-    },
+    };
+
     // ---------------------- выводим бомж или богатый.
-    getStatusIncome: function () {
+AppData.prototype.getStatusIncome = function () {
       if (appData.budgetDay > 1200) {
         return "У вас высокий уровень дохода";
       } else if (appData.budgetDay >= 600 && appData.budgetDay <= 1200) {
@@ -226,9 +244,9 @@ let appData = {
       } else if (appData.budgetDay <= 0) {
         return "Что то пошло не так!";
       }
-    },
+    };
     // -------------------------------- Проценты и залог в банке.
-    getInfoDeposit: function() {
+AppData.prototype.getInfoDeposit = function() {
       if (appData.deposit) {
         do {
           appData.persentDeposit = prompt('Какойd в банке годовой процент?', '10');
@@ -239,40 +257,34 @@ let appData = {
         }
         while (!isNumber(appData.moneyDeposit));
     }
-    },
-    calcPeriod: function() {
-      return appData.budgetMonth * range.value;
-    },
-    // ----------------выводим изменения range - в число------------
-    changeNumberPeriod: function() {
-      numberPeriod.textContent = range.value;
-    }
-  };
-//start.disabled = true;
-start.addEventListener('click', appData.start.bind(appData));             //------- кнопка "Расчитать"
-cancel.addEventListener('click', appData.res.bind(appData));             //------- кнопка "сбросить"
-expensesPlus.addEventListener('click',appData.addExpensesBlock);// ------ кнопка ПЛЮС обязательыне расходы
-incomePlus.addEventListener('click', appData.addIncomeBlock);// ------ кнопка ПЛЮС дополнительные расходы
-range.addEventListener('input', appData.changeNumberPeriod);//---------изменения range;
+    };
 
-salaryAmount.addEventListener('input', function () {  // -- проверяем поле "Месячный доход"
-  if (salaryAmount.value === '') {// ---если пустое
-     start.disabled = true;       // --- блокируем
-  } else {                        // --- иначе
-     start.disabled = false;      // --- не блокируем
-  }
-});
+AppData.prototype.calcPeriod = function() {
+      return appData.budgetMonth * range.value;
+    };
+    // ----------------выводим изменения range - в число------------
+AppData.prototype.changeNumberPeriod = function() {
+      numberPeriod.textContent = range.value;
+    };
+  
+AppData.prototype.eventListeners = function() { 
+  start.addEventListener('click', appData.start.bind(appData));             //------- кнопка "Расчитать"
+  cancel.addEventListener('click', appData.res.bind(appData));             //------- кнопка "сбросить"
+  expensesPlus.addEventListener('click',appData.addExpensesBlock);// ------ кнопка ПЛЮС обязательыне расходы
+  incomePlus.addEventListener('click', appData.addIncomeBlock);// ------ кнопка ПЛЮС дополнительные расходы
+  range.addEventListener('input', appData.changeNumberPeriod);//---------изменения range;
+
+  salaryAmount.addEventListener('input', function () {  // -- проверяем поле "Месячный доход"
+    if (salaryAmount.value === '') {// ---если пустое
+      start.disabled = true;       // --- блокируем
+    } else {                        // --- иначе
+      start.disabled = false;      // --- не блокируем
+    }
+  });
 
   appData.getInfoDeposit();
+};
 
-
-// ---Возможные расходы строкой в консоль  с большой буквы. Разделители запятая и пробел
-let newArr = [];
-for (let item of appData.addExpenses){
-   item = item.charAt(0).toUpperCase() + item.substr(1);
-   newArr.push(item);
-}
-console.log(newArr.join(', '));
-
-
-
+const appData = new AppData();
+appData.eventListeners();
+console.log(appData);
