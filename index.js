@@ -76,13 +76,18 @@ AppData.prototype.start = function () {
       this.getExpensesMonth();
       this.getAddExpenses();
       this.getAddIncome();
-      this.changePercent();
+      this.calcBudgetPercent();
       this.getBudget();
       //-------вызов showResult 
       this.showResult();
       this.blockInputs();
     };
 
+AppData.prototype.calcBudgetPercent = function() {
+  this.percentDeposit = +depositPercent.value; 
+  this.moneyDeposit =  +depositAmount.value;
+
+};
 AppData.prototype.res = function() {  // ----------------- тут я пытаюсь сделать сброс!! черт его дери
       const inputs = document.querySelectorAll('[type="text"]');
         for(let i = 0; i < inputs.length; i++) {//-------перебираю все инпуты
@@ -112,15 +117,14 @@ AppData.prototype.res = function() {  // ----------------- тут я пытаю�
           start.disabled = true;
           // -------------------Проверка блоков "Дополнительный доход" и удаление если болльше 1"
         if(incomeItems.length > 1) {
-          console.log('incomeItems.length: ', incomeItems.length);
           for(let i = 1; i < incomeItems.length; i++) {
-            incomeItems[i].style.display = 'none';
+            incomeItems[i].remove();
           }     
         }
         // -------------------Проверка блоков "обязательный расходы" и удаление если болльше 1"
         if(expensesItems.length > 1) {
           for(let i = 1; i < expensesItems.length; i++) {
-            expensesItems[i].style.display = 'none';
+            expensesItems[i].remove();
           }      
         }
         // ---------- проверка кнопки ПЛЮС и добавление - если не ее нет.
@@ -225,10 +229,8 @@ AppData.prototype.getExpensesMonth = function () {
     };
     // -------------------------------- тут наши накопления
 AppData.prototype.getBudget = function () {
-    const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
-    console.log(this.moneyDeposit);    
-    console.log(this.percentDeposit);    
-    console.log(monthDeposit);
+    const monthDeposit = appData.moneyDeposit * (appData.percentDeposit / 100);
+    console.log('appData.percentDeposit: ', appData.percentDeposit);
       appData.budgetMonth = appData.budget + appData.incomeMonth - appData.expensesMonth + monthDeposit;// --- за месяц
       appData.budgetDay = Math.floor(appData.budgetMonth / 30);// --- за день
     },
@@ -257,17 +259,9 @@ AppData.prototype.getStatusIncome = function () {
     // -------------------------------- Проценты и залог в банке.
 AppData.prototype.getInfoDeposit = function() {
       if (appData.deposit) {
-        do {
-          appData.persentDeposit = depositPercent.value;
-          console.log('getInfo что тут передается', depositPercent.value);
-          console.log('это appData.percentDeposit', appData.persentDeposit );
-        }
-        while (!isNumber(appData.persentDeposit));
-        do {
-          appData.moneyDeposit = depositAmount.value;
-        }
-        while (!isNumber(appData.moneyDeposit));
-    }
+        this.percentDeposit = +depositPercent.value;
+        this.moneyDeposit = +depositAmount.value;
+      }
     };
 
 AppData.prototype.calcPeriod = function() {
@@ -277,15 +271,29 @@ AppData.prototype.calcPeriod = function() {
 AppData.prototype.changeNumberPeriod = function() {
       numberPeriod.textContent = range.value;
     };
+
+   AppData.prototype.depositWalid = function() {
+      if (depositPercent.value < 0 || depositPercent.value > 100) {
+         alert('Введите корректное значение в поле проценты');
+         start.disabled = true;
+      } else {
+         start.disabled = false;
+      }
+
+   };
  // ---------------------- высчитываем проценты
 AppData.prototype.changePercent = function() {
   const valueSelect = this.value;
-  if(valueSelect === 'other') {
-    //ДОМАШКА
-  } else {
-    depositPercent.value = valueSelect;
-  }
-};
+        if (valueSelect === 'other') {
+            depositPercent.style.display = 'inline-block';
+            depositPercent.removeAttribute('disabled');
+            depositPercent.value = '';
+        } else {
+           
+            depositPercent.value = valueSelect;
+        }
+    };
+
     // ---------------- Добавляем арсчет депозита по checkbox
 AppData.prototype.depositHandler = function() {
   if(depositCheck.checked) {
@@ -305,6 +313,7 @@ AppData.prototype.depositHandler = function() {
     // ------------------ обнуляем значения
     depositBank.value = '';
     depositAmount.value = '';
+    depositPercent.value = '';
   
   }
 };
@@ -316,6 +325,8 @@ AppData.prototype.eventListeners = function() {
   incomePlus.addEventListener('click', appData.addIncomeBlock);// ------ кнопка ПЛЮС дополнительные расходы
   range.addEventListener('input', appData.changeNumberPeriod);//---------изменения range;
   depositCheck.addEventListener('change', this.depositHandler.bind(this));
+  depositPercent.addEventListener('keyup', this.depositWalid);
+
   salaryAmount.addEventListener('input', function () {  // -- проверяем поле "Месячный доход"
     if (salaryAmount.value === '') {// ---если пустое
       start.disabled = true;       // --- блокируем
