@@ -8,8 +8,11 @@ let start = document.getElementById('start'),
     expensesPlus = btnPlus[1],
     btnPlusIncome = document.querySelector('.income_add'),
     btnPlusExpenses = document.querySelector('.expenses_add'),
-//------------------------------------- Чекбокс Депозит---------------------------
-    chekBox = document.querySelector('.deposit-check'),
+//--------------------------- Депозит(check, bank, amount, percent)---------------------------
+    depositCheck = document.querySelector('#deposit-check'),
+    depositBank = document.querySelector('.deposit-bank'),
+    depositAmount = document.querySelector('.deposit-amount'),
+    depositPercent = document.querySelector('.deposit-percent'),
 //-----------------------------------Поля ввода возможных жоходов  ---------------------
     additionalIncomeItem = document.querySelectorAll('.additional_income-item'),
     incomeElem1 = document.querySelectorAll('.additional_income-item')[0],
@@ -69,9 +72,11 @@ AppData.prototype.start = function () {
      
       this.getExpenses();
       this.getIncome();
+      this.getInfoDeposit();
       this.getExpensesMonth();
       this.getAddExpenses();
       this.getAddIncome();
+      this.changePercent();
       this.getBudget();
       //-------вызов showResult 
       this.showResult();
@@ -220,7 +225,11 @@ AppData.prototype.getExpensesMonth = function () {
     };
     // -------------------------------- тут наши накопления
 AppData.prototype.getBudget = function () {
-      appData.budgetMonth = appData.budget + appData.incomeMonth - appData.expensesMonth;// --- за месяц
+    const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+    console.log(this.moneyDeposit);    
+    console.log(this.percentDeposit);    
+    console.log(monthDeposit);
+      appData.budgetMonth = appData.budget + appData.incomeMonth - appData.expensesMonth + monthDeposit;// --- за месяц
       appData.budgetDay = Math.floor(appData.budgetMonth / 30);// --- за день
     },
     // ---------------------- за сколько месяцев накопим до mission.
@@ -249,11 +258,13 @@ AppData.prototype.getStatusIncome = function () {
 AppData.prototype.getInfoDeposit = function() {
       if (appData.deposit) {
         do {
-          appData.persentDeposit = prompt('Какойd в банке годовой процент?', '10');
+          appData.persentDeposit = depositPercent.value;
+          console.log('getInfo что тут передается', depositPercent.value);
+          console.log('это appData.percentDeposit', appData.persentDeposit );
         }
         while (!isNumber(appData.persentDeposit));
         do {
-          appData.moneyDeposit = prompt('Какая заложена сумма в банке...?', 10000);
+          appData.moneyDeposit = depositAmount.value;
         }
         while (!isNumber(appData.moneyDeposit));
     }
@@ -266,6 +277,37 @@ AppData.prototype.calcPeriod = function() {
 AppData.prototype.changeNumberPeriod = function() {
       numberPeriod.textContent = range.value;
     };
+ // ---------------------- высчитываем проценты
+AppData.prototype.changePercent = function() {
+  const valueSelect = this.value;
+  if(valueSelect === 'other') {
+    //ДОМАШКА
+  } else {
+    depositPercent.value = valueSelect;
+  }
+};
+    // ---------------- Добавляем арсчет депозита по checkbox
+AppData.prototype.depositHandler = function() {
+  if(depositCheck.checked) {
+    depositBank.style.display = 'inline-block';
+    depositAmount.style.display = 'inline-block';
+    depositPercent.style.display = 'inline-block';
+    this.deposit = true;
+    depositBank.addEventListener('change', this.changePercent);
+    // ---------------- скрываем, если  убрали check
+  } else {
+    depositBank.style.display = 'none';
+    depositAmount.style.display = 'none';
+    depositPercent.style.display = 'none';
+    this.deposit = false;
+    depositBank.removeEventListener('change', this.changePercent);
+    
+    // ------------------ обнуляем значения
+    depositBank.value = '';
+    depositAmount.value = '';
+  
+  }
+};
   
 AppData.prototype.eventListeners = function() { 
   start.addEventListener('click', appData.start.bind(appData));             //------- кнопка "Расчитать"
@@ -273,7 +315,7 @@ AppData.prototype.eventListeners = function() {
   expensesPlus.addEventListener('click',appData.addExpensesBlock);// ------ кнопка ПЛЮС обязательыне расходы
   incomePlus.addEventListener('click', appData.addIncomeBlock);// ------ кнопка ПЛЮС дополнительные расходы
   range.addEventListener('input', appData.changeNumberPeriod);//---------изменения range;
-
+  depositCheck.addEventListener('change', this.depositHandler.bind(this));
   salaryAmount.addEventListener('input', function () {  // -- проверяем поле "Месячный доход"
     if (salaryAmount.value === '') {// ---если пустое
       start.disabled = true;       // --- блокируем
@@ -282,7 +324,7 @@ AppData.prototype.eventListeners = function() {
     }
   });
 
-  appData.getInfoDeposit();
+  //appData.getInfoDeposit();
 };
 
 const appData = new AppData();
