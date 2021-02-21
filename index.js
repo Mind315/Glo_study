@@ -198,7 +198,7 @@ class AppData {
       });
 
          for (let key in appData.income) {
-          appData.incomeMonth += +appData.income[key];
+          this.incomeMonth += +this.income[key];
          }
   }
     
@@ -224,15 +224,15 @@ class AppData {
   getExpensesMonth() {
       
       for (let key in appData.expenses) {
-        appData.expensesMonth += +appData.expenses[key];
+        this.expensesMonth += +this.expenses[key];
       }
   }
     // -------------------------------- тут наши накопления
   getBudget() {
-    const monthDeposit = appData.moneyDeposit * (appData.percentDeposit / 100);
-    console.log('appData.percentDeposit: ', appData.percentDeposit);
-      appData.budgetMonth = appData.budget + appData.incomeMonth - appData.expensesMonth + monthDeposit;// --- за месяц
-      appData.budgetDay = Math.floor(appData.budgetMonth / 30);// --- за день
+    const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+   
+      this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth + monthDeposit;// --- за месяц
+      this.budgetDay = Math.floor(this.budgetMonth / 30);// --- за день
   }
     // ---------------------- за сколько месяцев накопим до mission.
   getTargetMonth() {
@@ -246,13 +246,13 @@ class AppData {
 
     // ---------------------- выводим бомж или богатый.
   getStatusIncome() {
-      if (appData.budgetDay > 1200) {
+      if (this.budgetDay > 1200) {
         return "У вас высокий уровень дохода";
-      } else if (appData.budgetDay >= 600 && appData.budgetDay <= 1200) {
+      } else if (this.budgetDay >= 600 && this.budgetDay <= 1200) {
         return "У вас средний уровень дохода";
-      } else if (appData.budgetDay < 600 && appData.budgetDay > 0) {
+      } else if (this.budgetDay < 600 && this.budgetDay > 0) {
         return "К сожалению у вас уровень дохода ниже среднего";
-      } else if (appData.budgetDay <= 0) {
+      } else if (this.budgetDay <= 0) {
         return "Что то пошло не так!";
       }
   }
@@ -265,7 +265,7 @@ class AppData {
   }
 
   calcPeriod() {
-      return appData.budgetMonth * range.value;
+      return this.budgetMonth * range.value;
   }
     // ----------------выводим изменения range - в число------------
   changeNumberPeriod() {
@@ -319,11 +319,11 @@ class AppData {
   }
   
   eventListeners() { 
-    start.addEventListener('click', appData.start.bind(appData));             //------- кнопка "Расчитать"
-    cancel.addEventListener('click', appData.res.bind(appData));             //------- кнопка "сбросить"
-    expensesPlus.addEventListener('click',appData.addExpensesBlock);// ------ кнопка ПЛЮС обязательыне расходы
-    incomePlus.addEventListener('click', appData.addIncomeBlock);// ------ кнопка ПЛЮС дополнительные расходы
-    range.addEventListener('input', appData.changeNumberPeriod);//---------изменения range;
+    start.addEventListener('click', this.start.bind(this));             //------- кнопка "Расчитать"
+    cancel.addEventListener('click', this.res.bind(this));             //------- кнопка "сбросить"
+    expensesPlus.addEventListener('click',this.addExpensesBlock);// ------ кнопка ПЛЮС обязательыне расходы
+    incomePlus.addEventListener('click', this.addIncomeBlock);// ------ кнопка ПЛЮС дополнительные расходы
+    range.addEventListener('input', this.changeNumberPeriod);//---------изменения range;
     depositCheck.addEventListener('change', this.depositHandler.bind(this));
     depositPercent.addEventListener('keyup', this.depositWalid);
 
@@ -342,4 +342,3 @@ class AppData {
 
 const appData = new AppData();
 appData.eventListeners();
-console.log(appData);
