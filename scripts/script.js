@@ -5,6 +5,7 @@ window.addEventListener("DOMContentLoaded", function () {
     let timerHours = document.querySelector("#timer-hours"),
       timerMinutes = document.querySelector("#timer-minutes"),
       timerSeconds = document.querySelector("#timer-seconds");
+    let timerId;
 
     function getTimeRemaining() {
       let dateStop = new Date(deadline).getTime(),
@@ -31,7 +32,6 @@ window.addEventListener("DOMContentLoaded", function () {
 
     function updateClock() {
       let timer = getTimeRemaining();
-      let timerId = setInterval(updateClock, 1000);
 
       timerHours.textContent = zeroBefore(timer.hours);
       timerMinutes.textContent = zeroBefore(timer.minutes);
@@ -40,7 +40,7 @@ window.addEventListener("DOMContentLoaded", function () {
       //    setTimeout(updateClock, 1000);
       // }
       if (timer.timeRemaining > 0) {
-        setInterval(updateClock, 1000);
+        console.log();
       } else {
         clearInterval(timerId);
         timerHours.textContent = "00";
@@ -48,29 +48,35 @@ window.addEventListener("DOMContentLoaded", function () {
         timerSeconds.textContent = "00";
       }
     }
-    updateClock();
+    timerId = setInterval(updateClock, 1000);
   }
 
-  countTimer("27 febrary 2021");
+  countTimer("27 march 2021");
 
   // ------------------- MENU--------------------
 
   const toggleMenu = () => {
     const btnMenu = document.querySelector(".menu"),
       menu = document.querySelector("menu"),
-      closeBtn = document.querySelector(".close-btn"),
-      menuItems = menu.querySelectorAll("ul>li");
+      closeBtn = document.querySelector(".close-btn");
 
-    const handlerMenu = () => {
-      menu.classList.toggle("active-menu");
+    const handlerMenu = (event) => {
+
+      let target = event.target;
+      console.log(target);
+      console.log(target.closest(".close-btn"));
+
+      if (target.closest(".menu")) {
+        menu.classList.toggle("active-menu");
+      } else if (target === closeBtn || target.closest(".close-btn")) {
+        menu.classList.toggle("active-menu");
+      } else if (target !== menu) {
+        menu.classList.remove("active-menu");
+      }
     };
 
     btnMenu.addEventListener("click", handlerMenu);
-    closeBtn.addEventListener("click", handlerMenu);
-
-    menuItems.forEach((elem) => {
-      elem.addEventListener("click", handlerMenu);
-    });
+    menu.addEventListener("click", handlerMenu);
   };
 
   toggleMenu();
@@ -108,10 +114,56 @@ window.addEventListener("DOMContentLoaded", function () {
         }
       });
     });
-    popUpClose.addEventListener("click", () => {
-      popup.style.display = "none";
+    // popUpClose.addEventListener("click", () => {
+    //   popup.style.display = "none";
+    // });
+
+    popup.addEventListener("click", (event) => {
+      let target = event.target;
+
+      if (target.classList.contains("popup-close")) {
+        popup.style.display = "none";
+      } else {
+        target = target.closest(".popup-content");
+        if (!target) {
+          popup.style.display = "none";
+        }
+      }
     });
   };
 
   togglePopup();
+
+  //========================== TABS
+  const tabs = () => {
+    const tabHeader = document.querySelector(".service-header"),
+      tab = tabHeader.querySelectorAll(".service-header-tab"),
+      tabContent = document.querySelectorAll(".service-tab");
+
+    const toggleTabContent = (index) => {
+      for (let i = 0; i < tabContent.length; i++) {
+        if (index === i) {
+          tab[i].classList.add("active");
+          tabContent[i].classList.remove("d-none");
+        } else {
+          tab[i].classList.remove("active");
+          tabContent[i].classList.add("d-none");
+        }
+      }
+    };
+
+    tabHeader.addEventListener("click", (event) => {
+      let target = event.target;
+      target = target.closest(".service-header-tab");
+      if (target) {
+        tab.forEach((item, i) => {
+          if (item === target) {
+            toggleTabContent(i);
+          }
+        });
+      }
+    });
+  };
+
+  tabs();
 });
