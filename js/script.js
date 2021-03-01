@@ -54,7 +54,7 @@ class Todo {
          alert('Пустое поле нельзя добавить!');
          return;
       }
-      
+      this.input.value = ''; // --- чищу инпут
      
    }
    
