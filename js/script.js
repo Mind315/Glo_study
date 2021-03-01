@@ -93,6 +93,7 @@ class Todo {
    init() {
       this.form.addEventListener('submit', this.addTodo.bind(this));
       this.render();
+      this.handler();
    }
 }
 
