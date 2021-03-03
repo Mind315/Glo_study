@@ -319,6 +319,18 @@ window.addEventListener("DOMContentLoaded", function () {
         target.value = target.value.replace(/[^а-я\s-]/gi, "");
       }
     });
+    // --- тут удаление пробелов---
+    formName.addEventListener('blur', (event) => {
+      let target = event.target;
+      if(target.className === "top-form") {
+        target.value = target.value.trim();
+      }
+    // ------ тут жедаем первую строку заглавной
+      let temp = target.value.charAt(0).toUpperCase() + target.value.slice(1);
+      target.value = temp;
+      console.log(temp);
+      
+    });
     // ------------ валидация сообщения===========
     formMessage.addEventListener("input", (event) => {
       let target = event.target;
@@ -345,3 +357,4 @@ window.addEventListener("DOMContentLoaded", function () {
 // -------------------------------------------------------------------------------------------
   slider();
 });
+
