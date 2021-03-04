@@ -311,7 +311,24 @@ window.addEventListener("DOMContentLoaded", function () {
     const formName = document.getElementById("form2-name"),
       formMessage = document.getElementById("form2-message"),
       formEmail = document.getElementById("form2-email"),
-      formPhone = document.getElementById("form2-phone");
+      formPhone = document.getElementById("form2-phone"),
+      form2Bottom = document.querySelector('.footer-form-input .row');
+    // =================== Костыль = который не работает!!!!!!!!
+    console.log(form2Bottom);
+
+    form2Bottom.addEventListener('blur', (event) => {
+      let target = event.target;
+    
+      if(target.className === 'top-form' ||
+      target.className === 'top-form form-email' ||
+      target.className === 'top-form form-phone' ||
+      target.className === 'mess' 
+      ) {
+        target.value = target.value.replace(/^[ -]*|( |-)(?=\1)|[ -]*$/g, '').replace(/ +/g, ' ').trim();
+          
+      }
+      
+    });
     // ----------- Валидация имени=============
     formName.addEventListener("input", (event) => {
       let target = event.target;
@@ -323,12 +340,12 @@ window.addEventListener("DOMContentLoaded", function () {
     formName.addEventListener('blur', (event) => {
       let target = event.target;
       if(target.className === "top-form") {
-        target.value = target.value.trim();
+        target.value = target.value.replace(/^[ -]*|( |-)(?=\1)|[ -]*$/g, '').replace(/ +/g, ' ').trim();
       }
-    // ------ тут жедаем первую строку заглавной
-      let temp = target.value.charAt(0).toUpperCase() + target.value.slice(1);
+    // ------ тут делаем первую строку заглавной, а остальные мелкими
+      let temp = target.value.charAt(0).toUpperCase() + target.value.slice(1).toLowerCase();
       target.value = temp;
-      console.log(temp);
+     
       
     });
     // ------------ валидация сообщения===========
@@ -355,6 +372,53 @@ window.addEventListener("DOMContentLoaded", function () {
   };
   validForm();
 // -------------------------------------------------------------------------------------------
+// ------------------------------------- Канкулятор! =================
+const calc = (price = 100) => {
+  const calcBlock = document.querySelector('.calc-block'),
+    calcType = document.querySelector('.calc-type'),
+    calcSquare = document.querySelector('.calc-square'),
+    calcDay = document.querySelector('.calc-day'),
+    calcCount = document.querySelector('.calc-count'),
+    totalValue = document.getElementById('total');
+
+const countSum = () => {
+  let total = 0;
+  let countValue = 1;
+  let dayValue = 1;
+  const typeValue = calcType.options[calcType.selectedIndex].value;
+  const squareValue = +calcSquare.value;
+ 
+  if(calcCount.value >1) {
+  countValue += (calcCount.value - 1) / 10;
+  }
+
+  if(calcDay && calcDay.value < 5) {
+    dayValue *= 2;
+  } else if (calcDay && calcDay.value < 10) {
+    dayValue *= 1.5;
+  }
+
+  if(typeValue && squareValue) {
+    total = price * typeValue * squareValue * countValue * dayValue;
+  } 
+  totalValue.textContent = total;
+};
+
+  calcBlock.addEventListener('change', (event) => {
+    const target = event.target;
+
+    // if(target.matches('.calc-type') || target.matches('.calc-square') || 
+    //    target.matches('.calc-day') || target.matches('.calc-count')) {
+    //      console.log(111);
+    //    }
+    if(target === calcType || target === calcSquare ||
+       target === calcDay || target === calcCount) {
+        countSum();
+    }
+  });
+
+};
+calc(100);
   slider();
 });
 
