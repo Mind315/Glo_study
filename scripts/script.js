@@ -308,117 +308,190 @@ window.addEventListener("DOMContentLoaded", function () {
   validCalc();
   const validForm = () => {
     // -------------------- получение форм в переменные============
-    const formName = document.getElementById("form2-name"),
-      formMessage = document.getElementById("form2-message"),
-      formEmail = document.getElementById("form2-email"),
-      formPhone = document.getElementById("form2-phone"),
-      form2Bottom = document.querySelector('.footer-form-input .row');
-    // =================== Костыль = который не работает!!!!!!!!
-    console.log(form2Bottom);
+    const forms = document.querySelectorAll("form");
 
-    form2Bottom.addEventListener('blur', (event) => {
-      let target = event.target;
-    
-      if(target.className === 'top-form' ||
-      target.className === 'top-form form-email' ||
-      target.className === 'top-form form-phone' ||
-      target.className === 'mess' 
+    forms.forEach((form) => {
+      const inputs = form.querySelectorAll("input");
+
+      form.addEventListener("input", (event) => {
+        const target = event.target;
+        if (target.name === "user_name" || target.name === "user_message") {
+          target.value = target.value.replace(/[^а-я\s-]/gi, "");
+        } else if (target.name === "user_phone") {
+          target.value = target.value.replace(/[^\d()-]/gi, "");
+        } else if (target.name === "user_email") {
+          target.value = target.value.replace(/[^a-z@_\-\.!\~\*']/gi, "");
+        } else {
+          return;
+        }
+      });
+
+      inputs.forEach((input) => {
+        input.addEventListener("blur", (event) => {
+          const target = event.target;
+          if (target.name === "user_name") {
+            let temp =
+              target.value.charAt(0).toUpperCase() +
+              target.value.slice(1).toLowerCase();
+            target.value = temp;
+          } else if (
+            target.name === "user_phone" ||
+            target.name === "user_name" ||
+            target.name === "user_email" ||
+            target.name === "user_message"
+          ) {
+            target.value = target.value
+              .replace(/^[ -]*|( |-)(?=\1)|[ -]*$/g, "")
+              .replace(/ +/g, " ")
+              .trim();
+          } else if (target.name === "user_email") {
+            target.value = target.value.replace(/[^a-z@_\-\.!\~\*']/gi, "");
+          } else {
+            return;
+          }
+        });
+      });
+    });
+
+  };
+  validForm();
+  // -------------------------------------------------------------------------------------------
+  // ------------------------------------- Канкулятор! =================
+  const calc = (price = 100) => {
+    const calcBlock = document.querySelector(".calc-block"),
+      calcType = document.querySelector(".calc-type"),
+      calcSquare = document.querySelector(".calc-square"),
+      calcDay = document.querySelector(".calc-day"),
+      calcCount = document.querySelector(".calc-count"),
+      totalValue = document.getElementById("total");
+
+    const countSum = () => {
+      let total = 0;
+      let countValue = 1;
+      let dayValue = 1;
+      const typeValue = calcType.options[calcType.selectedIndex].value;
+      const squareValue = +calcSquare.value;
+
+      if (calcCount.value > 1) {
+        countValue += (calcCount.value - 1) / 10;
+      }
+
+      if (calcDay && calcDay.value < 5) {
+        dayValue *= 2;
+      } else if (calcDay && calcDay.value < 10) {
+        dayValue *= 1.5;
+      }
+
+      if (typeValue && squareValue) {
+        total = price * typeValue * squareValue * countValue * dayValue;
+      }
+      totalValue.textContent = total;
+    };
+
+    calcBlock.addEventListener("change", (event) => {
+      const target = event.target;
+
+      if (
+        target === calcType ||
+        target === calcSquare ||
+        target === calcDay ||
+        target === calcCount
       ) {
-        target.value = target.value.replace(/^[ -]*|( |-)(?=\1)|[ -]*$/g, '').replace(/ +/g, ' ').trim();
-          
-      }
-      
-    });
-    // ----------- Валидация имени=============
-    formName.addEventListener("input", (event) => {
-      let target = event.target;
-      if (target.className === "top-form") {
-        target.value = target.value.replace(/[^а-я\s-]/gi, "");
-      }
-    });
-    // --- тут удаление пробелов---
-    formName.addEventListener('blur', (event) => {
-      let target = event.target;
-      if(target.className === "top-form") {
-        target.value = target.value.replace(/^[ -]*|( |-)(?=\1)|[ -]*$/g, '').replace(/ +/g, ' ').trim();
-      }
-    // ------ тут делаем первую строку заглавной, а остальные мелкими
-      let temp = target.value.charAt(0).toUpperCase() + target.value.slice(1).toLowerCase();
-      target.value = temp;
-     
-      
-    });
-    // ------------ валидация сообщения===========
-    formMessage.addEventListener("input", (event) => {
-      let target = event.target;
-      if (target.className === "mess") {
-        target.value = target.value.replace(/[^а-я\s-]/gi, "");
-      }
-    });
-    // -------- валидация Емаил=============
-    formEmail.addEventListener("input", (event) => {
-      let target = event.target;
-      if (target.className === "top-form form-email") {
-        target.value = target.value.replace(/[^a-z@_\-\.!\~\*']/gi, "");
-      }
-    });
-    // ----------- валидация телефона===========
-    formPhone.addEventListener("input", (event) => {
-      let target = event.target;
-      if (target.className === "top-form form-phone") {
-        target.value = target.value.replace(/[^\d()-]/gi, "");
+        countSum();
       }
     });
   };
-  validForm();
-// -------------------------------------------------------------------------------------------
-// ------------------------------------- Канкулятор! =================
-const calc = (price = 100) => {
-  const calcBlock = document.querySelector('.calc-block'),
-    calcType = document.querySelector('.calc-type'),
-    calcSquare = document.querySelector('.calc-square'),
-    calcDay = document.querySelector('.calc-day'),
-    calcCount = document.querySelector('.calc-count'),
-    totalValue = document.getElementById('total');
+  calc(100);
 
-const countSum = () => {
-  let total = 0;
-  let countValue = 1;
-  let dayValue = 1;
-  const typeValue = calcType.options[calcType.selectedIndex].value;
-  const squareValue = +calcSquare.value;
- 
-  if(calcCount.value >1) {
-  countValue += (calcCount.value - 1) / 10;
-  }
+  // ----------------------------------------- send-ajax-form
+  const sendForm = () => {
+    // ---- сообщекния которые будем показывать пользователю
+		const errorMessage = 'Что-то пошло не так...',
+			loadMessage = 'Загрузка...',
+			successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
 
-  if(calcDay && calcDay.value < 5) {
-    dayValue *= 2;
-  } else if (calcDay && calcDay.value < 10) {
-    dayValue *= 1.5;
-  }
+		const postData = (body, outputData, errorData) => {
+			const request = new XMLHttpRequest();
+			request.addEventListener('readystatechange', () => {
+				if (request.readyState !== 4) {
+          // проверяем (как доходит до 4 - обхолим)
+					return;
+				}
+				if (request.status === 200) {
+					outputData();
+				} else {
+					errorData(request.status);
+				}
+			});
 
-  if(typeValue && squareValue) {
-    total = price * typeValue * squareValue * countValue * dayValue;
-  } 
-  totalValue.textContent = total;
-};
+			request.open('POST', './server.php'); // сам запрос через POST
+		
+			request.setRequestHeader('Content-Type', 'application/json');
+       // отправляем форм дату переделывая в json формат
+      // либо можно просто request.send(formData);
+			request.send(JSON.stringify(body));
+		};
+  // ----------- -----------------очистка инпутов.
+		const clearInput = (clearIdForm) => {
+			const form = document.getElementById(clearIdForm);
+      form.reset();
+		 
+		};
+// ---------------------------------------валидация форм
+		const validationForm = event => {
+      // ------ перенес условия из прошлой валидации
+      const target = event.target;
+      if (target.name === "user_name" || target.name === "user_message") {
+        target.value = target.value.replace(/[^а-я\s-]/gi, "");
+      } else if (target.name === "user_phone") {
+        target.value = target.value.replace(/[^\d()-]/gi, "");
+      } else if (target.name === "user_email") {
+        target.value = target.value.replace(/[^a-z@_\-\.!\~\*']/gi, "");
+      } else {
+        return;
+      }
+		};
 
-  calcBlock.addEventListener('change', (event) => {
-    const target = event.target;
+		const actionsForm = (selectedForm) => {
+			const form = document.getElementById(selectedForm);
+			const statusMessage = document.createElement('div');
 
-    // if(target.matches('.calc-type') || target.matches('.calc-square') || 
-    //    target.matches('.calc-day') || target.matches('.calc-count')) {
-    //      console.log(111);
-    //    }
-    if(target === calcType || target === calcSquare ||
-       target === calcDay || target === calcCount) {
-        countSum();
-    }
-  });
 
-};
-calc(100);
+			statusMessage.style.cssText = 'font-size: 2rem; color: #fff';
+	
+
+			form.addEventListener('submit', event => {
+				const formData = new FormData(form);
+				const body = {};
+
+        
+        statusMessage.textContent = '';
+        statusMessage.className = 'sk-rotating-plane';
+				// statusMessage.textContent = loadMessage;
+				event.preventDefault();
+				form.appendChild(statusMessage);
+
+				formData.forEach((val, key) => {
+					body[key] = val;
+				});
+
+				postData(body, () => {
+          
+          statusMessage.className = '';
+					statusMessage.textContent = successMessage;
+          
+					clearInput(selectedForm);
+				}, error => {
+					statusMessage.textContent = errorMessage;
+					console.error(error);
+				});
+			});
+			form.addEventListener('input', validationForm);
+		};
+		actionsForm('form1');
+		actionsForm('form2');
+		actionsForm('form3');
+	};
+  sendForm();
   slider();
 });
-
