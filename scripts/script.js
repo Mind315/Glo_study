@@ -409,55 +409,43 @@ window.addEventListener("DOMContentLoaded", function () {
 		const errorMessage = 'Что-то пошло не так...',
 			loadMessage = 'Загрузка...',
 			successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
-    const postData = (body) => {
 
-      return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-
-        request.addEventListener('readystatechange', () => {
-          if (request.readyState !== 4) {
-            // проверяем (как доходит до 4 - обхолим)
-            return;
-          }
-          if (request.status === 200) {
-            resolve();
-          } else {
-            reject(request.status);
-          }
+      const postData = (body) => {
+        return fetch('./server.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/from-data'
+          },
+          body: JSON.stringify(body)
         });
+      };
+    // const postData = (body) => {
+
+    //   return new Promise((resolve, reject) => {
+    //     const request = new XMLHttpRequest();
+
+    //     request.addEventListener('readystatechange', () => {
+    //       if (request.readyState !== 4) {
+    //         // проверяем (как доходит до 4 - обхолим)
+    //         return;
+    //       }
+    //       if (request.status === 200) {
+    //         resolve();
+    //       } else {
+    //         reject(request.status);
+    //       }
+    //     });
   
-        request.open('POST', './server.php'); // сам запрос через POST
+    //     request.open('POST', './server.php'); // сам запрос через POST
       
-        request.setRequestHeader('Content-Type', 'application/json');
-         // отправляем форм дату переделывая в json формат
-        // либо можно просто request.send(formData);
-        request.send(JSON.stringify(body));
-      });
+    //     request.setRequestHeader('Content-Type', 'application/json');
+    //      // отправляем форм дату переделывая в json формат
+    //     // либо можно просто request.send(formData);
+    //     request.send(JSON.stringify(body));
+    //   });
 
-    };
+    // };
       
-
-		// const postData = (body, outputData, errorData) => {
-		// 	const request = new XMLHttpRequest();
-		// 	request.addEventListener('readystatechange', () => {
-		// 		if (request.readyState !== 4) {
-    //       // проверяем (как доходит до 4 - обхолим)
-		// 			return;
-		// 		}
-		// 		if (request.status === 200) {
-		// 			outputData();
-		// 		} else {
-		// 			errorData(request.status);
-		// 		}
-		// 	});
-
-		// 	request.open('POST', './server.php'); // сам запрос через POST
-		
-		// 	request.setRequestHeader('Content-Type', 'application/json');
-    //    // отправляем форм дату переделывая в json формат
-    //   // либо можно просто request.send(formData);
-		// 	request.send(JSON.stringify(body));
-		// };
   // ----------- -----------------очистка инпутов.
 		const clearInput = (clearIdForm) => {
 			const form = document.getElementById(clearIdForm);
@@ -503,7 +491,10 @@ window.addEventListener("DOMContentLoaded", function () {
 				});
 
           postData(body)
-            .then(() => {
+            .then((response) => {
+                if(response.status !== 200) {
+                  throw new Error('status network is not 200');
+                }
                 statusMessage.className = '';
 					      statusMessage.textContent = successMessage;
 				      	clearInput(selectedForm);
