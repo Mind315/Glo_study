@@ -48,6 +48,7 @@ window.addEventListener("DOMContentLoaded", function () {
         timerSeconds.textContent = "00";
       }
     }
+	updateClock();  
     timerId = setInterval(updateClock, 1000);
   }
 
