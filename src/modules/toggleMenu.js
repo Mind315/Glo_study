@@ -1,26 +1,21 @@
-'use strict';
+"use strict";
 
 const toggleMenu = () => {
-   const btnMenu = document.querySelector(".menu"),
-     menu = document.querySelector("menu"),
-     closeBtn = document.querySelector(".close-btn");
+  const menu = document.querySelector("menu");
 
-   const handlerMenu = (event) => {
-     let target = event.target;
-     console.log(target);
-     console.log(target.closest(".close-btn"));
+  const handlerMenu = (event) => {
+    const target = event.target;
 
-     if (target.closest(".menu")) {
-       menu.classList.toggle("active-menu");
-     } else if (target === closeBtn || target.closest(".close-btn")) {
-       menu.classList.toggle("active-menu");
-     } else if (target !== menu) {
-       menu.classList.remove("active-menu");
-     }
-   };
+    if (
+      target.closest(".menu") ||
+      (!target.closest("menu") && menu.classList.contains("active-menu"))
+    ) {
+      menu.classList.toggle("active-menu");
+    } else if (target.closest("menu") && target.closest('[href^="#"]')) {
+      menu.classList.toggle("active-menu");
+    }
+  };
+  document.body.addEventListener("click", handlerMenu);
+};
 
-   btnMenu.addEventListener("click", handlerMenu);
-   menu.addEventListener("click", handlerMenu);
- };
-
- export default toggleMenu;
+export default toggleMenu;

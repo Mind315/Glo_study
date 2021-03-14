@@ -4,19 +4,19 @@ const togglePopup = () => {
    const popup = document.querySelector(".popup"),
      popupBtn = document.querySelectorAll(".popup-btn"),
      popUpClose = document.querySelector(".popup-close");
-   let popupStartPos = -700,
-     popupCount = -700;
+   let popupStartPos = 700,
+     popupCount = 700;
 
    //----------------------- Аниммм
    const animPopup = () => {
      if (popupStartPos > 0) {
-       popupCount -= 10;
+       popupCount -= 20;
      } else {
-       popupCount += 10;
+       popupCount += 20;
      }
      document.querySelector(
        ".popup-content"
-     ).style.transform = `translateX(${popupCount}px)`;
+     ).style.transform = `translateY(${popupCount}px)`;
 
      if (popupStartPos > 0 ? popupCount > 0 : popupCount < 0) {
        requestAnimationFrame(animPopup);

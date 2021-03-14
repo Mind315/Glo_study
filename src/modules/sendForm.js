@@ -75,16 +75,7 @@ const sendForm = () => {
                statusMessage.textContent = errorMessage;
                console.error(error);
            });
-           // postData(body, () => {
          
-       //   statusMessage.className = '';
-           // 	statusMessage.textContent = successMessage;
-         
-           // 	clearInput(selectedForm);
-           // }, error => {
-           // 	statusMessage.textContent = errorMessage;
-           // 	console.error(error);
-           // });
         });
         form.addEventListener('input', validationForm);
      };
