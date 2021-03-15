@@ -66,7 +66,7 @@ const sendForm = () => {
           statusMessage.textContent = successMessage;
           setTimeout(() => {
             popup.style.display = "none";
-          }, 2000);
+          }, 3500);
           clearInput(selectedForm);
         })
 
