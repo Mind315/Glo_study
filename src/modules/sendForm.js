@@ -70,11 +70,19 @@ const sendForm = () => {
                
                statusMessage.className = '';
                     statusMessage.textContent = successMessage;
+                    setTimeout(() =>{
+                      popup.style.display = "none";
+                   }, 2000);  
                     
-                    popup.style.display = "none";
                     clearInput(selectedForm);
                   
            })
+           .then(setTimeout(() =>{
+            statusMessage.textContent = '';
+         }, 3000))
+         
+         
+          
            
            .catch((error) => {
              statusMessage.className = '';
