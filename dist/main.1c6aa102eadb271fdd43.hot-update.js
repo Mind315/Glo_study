@@ -8,13 +8,14 @@
  */
 self["webpackHotUpdate_3DGlo"]("main",{
 
-/***/ "./src/modules/toggleMenu.js":
-/*!***********************************!*\
-  !*** ./src/modules/toggleMenu.js ***!
-  \***********************************/
-/***/ (() => {
+/***/ "./src/modules/calc.js":
+/*!*****************************!*\
+  !*** ./src/modules/calc.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("throw new Error(\"Module build failed (from ./node_modules/babel-loader/lib/index.js):\\nSyntaxError: C:\\\\GloAcademy\\\\src\\\\modules\\\\toggleMenu.js: Unexpected token, expected \\\",\\\" (7:4)\\n\\n\\u001b[0m \\u001b[90m  5 |\\u001b[39m\\u001b[0m\\n\\u001b[0m \\u001b[90m  6 |\\u001b[39m   \\u001b[36mconst\\u001b[39m handlerMenu \\u001b[33m=\\u001b[39m (event\\u001b[0m\\n\\u001b[0m\\u001b[31m\\u001b[1m>\\u001b[22m\\u001b[39m\\u001b[90m  7 |\\u001b[39m     git ad) \\u001b[33m=>\\u001b[39m {\\u001b[0m\\n\\u001b[0m \\u001b[90m    |\\u001b[39m     \\u001b[31m\\u001b[1m^\\u001b[22m\\u001b[39m\\u001b[0m\\n\\u001b[0m \\u001b[90m  8 |\\u001b[39m     \\u001b[36mconst\\u001b[39m target \\u001b[33m=\\u001b[39m event\\u001b[33m.\\u001b[39mtarget\\u001b[33m;\\u001b[39m\\u001b[0m\\n\\u001b[0m \\u001b[90m  9 |\\u001b[39m\\u001b[0m\\n\\u001b[0m \\u001b[90m 10 |\\u001b[39m     \\u001b[36mif\\u001b[39m (\\u001b[0m\\n    at Parser._raise (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:776:17)\\n    at Parser.raiseWithData (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:769:17)\\n    at Parser.raise (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:737:17)\\n    at Parser.unexpected (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:9686:16)\\n    at Parser.expect (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:9672:28)\\n    at Parser.parseParenAndDistinguishExpression (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:11239:14)\\n    at Parser.parseExprAtom (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:10973:21)\\n    at Parser.parseExprSubscripts (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:10655:23)\\n    at Parser.parseUpdate (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:10635:21)\\n    at Parser.parseMaybeUnary (C:\\\\GloAcademy\\\\node_modules\\\\@babel\\\\parser\\\\lib\\\\index.js:10613:23)\");\n\n//# sourceURL=webpack://3DGlo/./src/modules/toggleMenu.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n\n\nvar calc = function calc() {\n  var price = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;\n  var calcBlock = document.querySelector(\".calc-block\"),\n      calcType = document.querySelector(\".calc-type\"),\n      calcSquare = document.querySelector(\".calc-square\"),\n      calcDay = document.querySelector(\".calc-day\"),\n      calcCount = document.querySelector(\".calc-count\"),\n      totalValue = document.getElementById(\"total\");\n\n  var countSum = function countSum() {\n    var total = 0;\n    var countValue = 1;\n    var dayValue = 1;\n    var typeValue = calcType.options[calcType.selectedIndex].value;\n    var squareValue = +calcSquare.value;\n\n    if (calcCount.value > 1) {\n      countValue += (calcCount.value - 1) / 10;\n    }\n\n    if (calcDay && calcDay.value < 5) {\n      dayValue *= 2;\n    } else if (calcDay && calcDay.value < 10) {\n      dayValue *= 1.5;\n    }\n\n    if (typeValue && squareValue) {\n      total = price * typeValue * squareValue * countValue * dayValue;\n    }\n\n    totalValue.textContent = total + 11111111;\n  };\n\n  calcBlock.addEventListener(\"change\", function (event) {\n    var target = event.target;\n\n    if (target === calcType || target === calcSquare || target === calcDay || target === calcCount) {\n      countSum();\n    }\n  });\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (calc);\n\n//# sourceURL=webpack://3DGlo/./src/modules/calc.js?");
 
 /***/ })
 
@@ -24,7 +25,7 @@ eval("throw new Error(\"Module build failed (from ./node_modules/babel-loader/li
 /******/ 
 /******/ /* webpack/runtime/getFullHash */
 /******/ (() => {
-/******/ 	__webpack_require__.h = () => ("c3b17fe379409d5c09d7")
+/******/ 	__webpack_require__.h = () => ("14067344891d3393965d")
 /******/ })();
 /******/ 
 /******/ }

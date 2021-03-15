@@ -4,6 +4,7 @@ const togglePopup = () => {
    const popup = document.querySelector(".popup"),
      popupBtn = document.querySelectorAll(".popup-btn"),
      popUpClose = document.querySelector(".popup-close");
+     
    let popupStartPos = 700,
      popupCount = 700;
 
@@ -32,10 +33,6 @@ const togglePopup = () => {
        }
      });
    });
-   // popUpClose.addEventListener("click", () => {
-   //   popup.style.display = "none";
-   // });
-
    popup.addEventListener("click", (event) => {
      let target = event.target;
 

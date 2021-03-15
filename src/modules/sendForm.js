@@ -40,6 +40,7 @@ const sendForm = () => {
      const actionsForm = (selectedForm) => {
         const form = document.getElementById(selectedForm);
         const statusMessage = document.createElement('div');
+        const popup = document.querySelector(".popup");
 
 
         statusMessage.style.cssText = 'font-size: 2rem; color: #fff';
@@ -52,7 +53,7 @@ const sendForm = () => {
        
        statusMessage.textContent = '';
        statusMessage.className = 'sk-rotating-plane';
-           // statusMessage.textContent = loadMessage;
+           
            event.preventDefault();
            form.appendChild(statusMessage);
 
@@ -66,15 +67,25 @@ const sendForm = () => {
                  throw new Error('status network is not 200');
                  
                }
+               
                statusMessage.className = '';
                     statusMessage.textContent = successMessage;
+                    
+                    popup.style.display = "none";
                     clearInput(selectedForm);
+                  
            })
+           
            .catch((error) => {
              statusMessage.className = '';
                statusMessage.textContent = errorMessage;
                console.error(error);
-           });
+           })
+          
+           .then(setTimeout(() =>{
+             statusMessage.textContent = '';
+          }, 3000));
+           
          
         });
         form.addEventListener('input', validationForm);

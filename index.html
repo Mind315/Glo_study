@@ -91,6 +91,7 @@
                 class="form-name"
                 id="form1-name"
                 name="user_name"
+                pattern=".{2,}"
                 placeholder="Ваше имя"
                 required
               />
@@ -111,6 +112,8 @@
                 class="form-phone"
                 id="form1-phone"
                 name="user_phone"
+                pattern=".{7,}"
+                maxlength="12"
                 placeholder="Номер телефона"
                 required
               />
@@ -427,6 +430,7 @@
                       id="form2-name"
                       type="text"
                       name="user_name"
+                      pattern=".{2,}"
                       placeholder="Ваше имя"
                       required
                     />
@@ -451,7 +455,9 @@
                       id="form2-phone"
                       type="tel"
                       name="user_phone"
+                      pattern=".{7,}"
                       placeholder="Номер телефона"
+                      maxlength="12"
                       required
                     />
                   </div>
@@ -461,6 +467,7 @@
                       id="form2-message"
                       name="user_message"
                       placeholder="Ваше сообщение"
+                      required
                     />
                   </div>
                 </div>
@@ -551,6 +558,7 @@
                 class="form-name"
                 id="form3-name"
                 name="user_name"
+                pattern=".{2,}"
                 placeholder="Ваше имя"
                 required
               />
@@ -561,6 +569,8 @@
                 class="form-phone"
                 id="form3-phone"
                 name="user_phone"
+                pattern=".{7,}"
+                maxlength="12"
                 placeholder="Ваш номер телефона"
                 required
               />
@@ -575,7 +585,7 @@
                 required
               />
             </div>
-            <button class="btn form-btn" type="submit">Оставить заявку!</button>
+            <button class="btn form-btn btnPopup" type="submit">Оставить заявку!</button>
           </form>
         </div>
       </div>
