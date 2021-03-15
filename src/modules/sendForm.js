@@ -63,7 +63,7 @@ const sendForm = () => {
 
          postData(body)
            .then((response) => {
-               if(response.status === 200) {
+               if(response.status !== 200) {
                  throw new Error('status network is not 200');
                  
                }
